@@ -16,11 +16,11 @@ public class AlbumTracker {
         runTracker();
     }
 
-    // MODIFIES: THIS
+    // MODIFIES: this
     // EFFECTS: processes user input
     private void runTracker() {
         boolean keepGoing = true;
-        String command = null;
+        String command;
 
         init();
 
@@ -50,18 +50,25 @@ public class AlbumTracker {
     // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
-        if (command.equals("l")) {
-            addAlbum();
-        } else if (command.equals("r")) {
-            removeAlbum();
-        } else if (command.equals("v")) {
-            viewRecent();
-        } else if (command.equals("b")) {
-            viewHighest();
-        } else if (command.equals("8")) {
-            rateAlbum();
-        } else {
-            System.out.println("Selection not valid...");
+        switch (command) {
+            case "l":
+                addAlbum();
+                break;
+            case "r":
+                removeAlbum();
+                break;
+            case "v":
+                viewRecent();
+                break;
+            case "b":
+                viewHighest();
+                break;
+            case "8":
+                rateAlbum();
+                break;
+            default:
+                System.out.println("Selection not valid...");
+                break;
         }
     }
 
@@ -76,37 +83,68 @@ public class AlbumTracker {
         System.out.println("\tq -> quit application");
     }
 
-    // EFFECTS: adds album to end of list of current albums
+    // EFFECTS: determines correct input / if album has already been added
     private void addAlbum() {
-        Boolean listened = false;
-        int rating = -1;
         System.out.println("Enter album name:");
         String name = input.next();
-        System.out.println("Have you listened to it yet?");
-        listened = input.nextBoolean();
-        if (listened) {
-            System.out.println("What would you rate the album?");
-            rating = input.nextInt();
+        if (invalidString(name)) {
+            System.out.println("Input not valid...");
+        } else if (doesAlbumExist(name)) {
+            System.out.println("Album has already been added!");
+        } else {
+            validAlbumInput(name);
         }
-        albumDirectory.addNewAlbum(name, rating);
-        System.out.println("Your album has been added to the list!");
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds album from using album name
+    private void validAlbumInput(String name) {
+        int rating;
+        String listened;
+        System.out.println("Have you listened to it yet? (y/n)");
+        listened = input.next();
+        if (listened.equals("y") || listened.equals("yes")) {
+            System.out.println("What would you rate the album?");
+            rating = input.nextInt();
+            if (allowedRating(rating)) {
+                albumDirectory.addNewAlbum(name, rating);
+                System.out.println("Your album has been added to the list!");
+            } else {
+                System.out.println("Please enter a valid rating from 0-10!");
+            }
+        } else if (listened.equals("n") || listened.equals("no")) {
+            rating = -1;
+            albumDirectory.addNewAlbum(name, rating);
+            System.out.println("Your album has been added to the list!");
+        } else {
+            System.out.println("Please make a valid input!");
+        }
+    }
+
+    // MODIFIES: this
     // EFFECTS: removes album input (by name) from list of albums
     private void removeAlbum() {
         ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
 
         System.out.println("Enter album name for removal:");
         String name = input.next();
-
-        for (Album album : recentAlbums) {
-            if (name.equals(album.getName())) {
-                albumDirectory.removeNewAlbum(album);
+        if (invalidString(name)) {
+            System.out.println("Input not valid...");
+        } else if (doesAlbumExist(name)) {
+            for (int i = recentAlbums.size() - 1; i > -1; i--) {
+                Album album = recentAlbums.get(i);
+                if (name.equals(album.getName())) {
+                    albumDirectory.removeNewAlbum(album);
+                }
             }
+            System.out.println("Your album has been removed.");
+        } else {
+            System.out.println("That album does not exist!");
         }
     }
 
-    // EFFECTS: views the list of albums starting with
+    // MODIFIES: this
+    // EFFECTS: views the list of albums starting with the most recent album
     private void viewRecent() {
         albumDirectory.recentSortAlbums();
         ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
@@ -122,7 +160,8 @@ public class AlbumTracker {
         }
     }
 
-    // EFFECTS: views the list of albums starting with
+    // MODIFIES: this
+    // EFFECTS: views the list of albums starting with the highest rated album
     private void viewHighest() {
         albumDirectory.rateSortAlbums();
         ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
@@ -138,18 +177,31 @@ public class AlbumTracker {
         }
     }
 
-    // EFFECTS: removes album input (by name) from list of albums
+    // MODIFIES: this
+    // EFFECTS: adjusts the rating of input album (by name)
     private void rateAlbum() {
         ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
 
         System.out.println("Enter album name to be rated:");
         String name = input.next();
-        System.out.println("Enter it's new rating:");
-        int rating = input.nextInt();
+        if (invalidString(name)) {
+            System.out.println("Input not valid...");
+        } else if (!doesAlbumExist(name)) {
+            System.out.println("Album does not exist.");
+        } else {
+            System.out.println("Enter it's new rating:");
+            int rating = input.nextInt();
 
-        for (Album album : recentAlbums) {
-            if (name.equals(album.getName())) {
-                album.rateAlbum(rating);
+            if (allowedRating(rating)) {
+
+                for (Album album : recentAlbums) {
+                    if (name.equals(album.getName())) {
+                        album.rateAlbum(rating);
+                    }
+                }
+                System.out.println("Your rating has been changed.");
+            } else {
+                System.out.println("Please enter a valid rating from 0-10!");
             }
         }
     }
@@ -161,24 +213,32 @@ public class AlbumTracker {
     // VARIOUS HELPERS AND GETTERS
 
 //    private Boolean nextYesNo(String str) {
-//        if (str == "y" || str == "yes") {
+//        if (Objects.equals(str, "y") || Objects.equals(str, "yes")) {
 //            return true;
 //        }
-//        if (str == "n" || str == "no") {
+//        if (Objects.equals(str, "n") || Objects.equals(str, "no")) {
 //            return false;
 //        }
 //    }
-
-//    // EFFECTS: checks to see if the string input is valid and not empty or blank
-//    private Boolean validString(String str) {
-//        return (str.replaceAll("\\s", "") == "");
-//    }
 //
-//    // EFFECTS: determines if the album is already in the album list
-//    private Boolean uniqueAlbum(String albumName) {
-//        return albumList.contains(albumName);
-//    }
+    // EFFECTS: determines whether the number input is within the bounds
+    private Boolean allowedRating(int num) {
+        return (num >= 0 && num <= 10);
+    }
 
+    // EFFECTS: checks to see if the string input is valid and not empty or blank
+    private Boolean invalidString(String str) {
+        return (str.replaceAll("\\s", "").equals(""));
+    }
+
+    // EFFECTS: determines if the album is already in the album list
+    private Boolean doesAlbumExist(String albumName) {
+        List<String> names = new ArrayList<>();
+        for (Album album : albumDirectory.getAlbums()) {
+            names.add(album.getName());
+        }
+        return names.contains(albumName);
+    }
 
 
 }

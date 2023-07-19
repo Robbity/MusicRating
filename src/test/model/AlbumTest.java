@@ -10,13 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class AlbumTest {
     private Album testRatedAlbum;
     private Album testAlbum;
-    private Album testAlbum2;
 
     @BeforeEach
     void runBefore() {
         testRatedAlbum = new Album("Iridescence", 10, 0);
         testAlbum = new Album("DAMN", -1, 1);
-        testAlbum2 = new Album("BA", 7);
     }
 
     @Test
