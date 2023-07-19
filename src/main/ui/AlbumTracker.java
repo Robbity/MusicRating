@@ -3,9 +3,7 @@ package ui;
 import model.Album;
 import model.AlbumDirectory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 // Album Tracker application
 public class AlbumTracker {
@@ -54,14 +52,14 @@ public class AlbumTracker {
     private void processCommand(String command) {
         if (command.equals("l")) {
             addAlbum();
-//        } else if (command.equals("r")) {
-//            removeAlbum();
+        } else if (command.equals("r")) {
+            removeAlbum();
         } else if (command.equals("v")) {
             viewRecent();
-//        } else if (command.equals("b")) {
-//            viewHighest();
-//        } else if (command.equals("8")) {
-//            rateAlbum();
+        } else if (command.equals("b")) {
+            viewHighest();
+        } else if (command.equals("8")) {
+            rateAlbum();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -78,6 +76,7 @@ public class AlbumTracker {
         System.out.println("\tq -> quit application");
     }
 
+    // EFFECTS: adds album to end of list of current albums
     private void addAlbum() {
         Boolean listened = false;
         int rating = -1;
@@ -89,29 +88,72 @@ public class AlbumTracker {
             System.out.println("What would you rate the album?");
             rating = input.nextInt();
         }
-        Album addedAlbum = new Album(name, rating);
-        albumDirectory.addNewAlbum(addedAlbum);
+        albumDirectory.addNewAlbum(name, rating);
         System.out.println("Your album has been added to the list!");
     }
 
+    // EFFECTS: removes album input (by name) from list of albums
     private void removeAlbum() {
+        ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
+
         System.out.println("Enter album name for removal:");
         String name = input.next();
 
+        for (Album album : recentAlbums) {
+            if (name.equals(album.getName())) {
+                albumDirectory.removeNewAlbum(album);
+            }
+        }
     }
 
+    // EFFECTS: views the list of albums starting with
     private void viewRecent() {
+        albumDirectory.recentSortAlbums();
         ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
-        for (Album album : recentAlbums) {
+        for (int i = recentAlbums.size() - 1; i > -1; i--) {
+            Album album = recentAlbums.get(i);
             String albumString;
             if (album.getRating() == -1) {
-                albumString = String.format("%s, UNLISTENED", album.getName());
+                albumString = String.format("%s - UNLISTENED", album.getName());
             } else {
-                albumString = String.format("%s, %d/10", album.getName(), album.getRating());
+                albumString = String.format("%s - %d/10", album.getName(), album.getRating());
             }
             System.out.println(albumString);
         }
     }
+
+    // EFFECTS: views the list of albums starting with
+    private void viewHighest() {
+        albumDirectory.rateSortAlbums();
+        ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
+        for (int i = recentAlbums.size() - 1; i > -1; i--) {
+            Album album = recentAlbums.get(i);
+            String albumString;
+            if (album.getRating() == -1) {
+                albumString = String.format("%s - UNLISTENED", album.getName());
+            } else {
+                albumString = String.format("%s - %d/10", album.getName(), album.getRating());
+            }
+            System.out.println(albumString);
+        }
+    }
+
+    // EFFECTS: removes album input (by name) from list of albums
+    private void rateAlbum() {
+        ArrayList<Album> recentAlbums = albumDirectory.getAlbums();
+
+        System.out.println("Enter album name to be rated:");
+        String name = input.next();
+        System.out.println("Enter it's new rating:");
+        int rating = input.nextInt();
+
+        for (Album album : recentAlbums) {
+            if (name.equals(album.getName())) {
+                album.rateAlbum(rating);
+            }
+        }
+    }
+
 
 
 

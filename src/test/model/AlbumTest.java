@@ -10,11 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class AlbumTest {
     private Album testRatedAlbum;
     private Album testAlbum;
+    private Album testAlbum2;
 
     @BeforeEach
     void runBefore() {
-        testRatedAlbum = new Album("Iridescence", 10);
-        testAlbum = new Album("DAMN");
+        testRatedAlbum = new Album("Iridescence", 10, 0);
+        testAlbum = new Album("DAMN", -1, 1);
+        testAlbum2 = new Album("BA", 7);
     }
 
     @Test
@@ -23,6 +25,9 @@ class AlbumTest {
         assertEquals(10, testRatedAlbum.getRating());
         assertEquals("DAMN", testAlbum.getName());
         assertEquals(-1, testAlbum.getRating());
+
+        assertEquals(0, testRatedAlbum.getId());
+        assertEquals(1, testAlbum.getId());
     }
 
     @Test
