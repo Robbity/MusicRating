@@ -29,10 +29,18 @@ document what music they've been keeping up with recently.
 
 *A few examples to show how someone can use this application to produce a specific outcome.*
 
-- As a user, I want to be able to add an album to the list of albums I've listened to
-- As a user, I want to be able to view the list of albums I've listened to
+PHASE 1
+
+- As a user, I want to be able to add an album to the list of albums I've listened to ✅
+- As a user, I want to be able to view the list of albums I've listened to ✅
 - As a user, I want to be able to mark whether I've listened to an album or not
-- As a user, I want to be able to remove an album from my list
+- As a user, I want to be able to remove an album from my list ✅
 - As a user, I want to be able to see the total number of albums I've listened to
-- As a user, I want to be able to rate my albums on a scale of 10
-- As a user, I want to be able to sort my albums by rating and other details
+- As a user, I want to be able to rate my albums on a scale of 10 ✅
+- As a user, I want to be able to sort my albums by rating and other details ✅
+
+PHASE 2
+
+- As a user, I want to be able to save my tracked albums list to file (if I so choose)
+- As a user, when I select the quit option from the application menu, I want to be reminded to save my tracked albums list to file and have the option to do so or not.
+- As a user, when I start the application, I want to be given the option to load my tracked albums list from file.
