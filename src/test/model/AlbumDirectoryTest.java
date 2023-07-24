@@ -16,7 +16,7 @@ public class AlbumDirectoryTest {
 
     @BeforeEach
     void runBefore() {
-        testAlbumDirectory = new AlbumDirectory();
+        testAlbumDirectory = new AlbumDirectory("Test Directory");
         testRatedAlbum = new Album("Iridescence", 10);
         testRatedAlbum2 = new Album("Certified Lover Boy", 3);
         testRatedAlbum3 = new Album("SOS", 5);
@@ -35,6 +35,7 @@ public class AlbumDirectoryTest {
 
         testAlbumDirectory.addNewAlbum(testRatedAlbum);
         assertEquals(1, testAlbumDirectory.getAlbums().size());
+        assertEquals("Test Directory", testAlbumDirectory.getName());
 
     }
 
@@ -45,6 +46,7 @@ public class AlbumDirectoryTest {
         testAlbumDirectory.addNewAlbum(testAlbum);
         testAlbumDirectory.addNewAlbum("Drake", 0);
         assertEquals(3, testAlbumDirectory.getAlbums().size());
+        assertEquals("Test Directory", testAlbumDirectory.getName());
 
     }
 
@@ -60,6 +62,8 @@ public class AlbumDirectoryTest {
         ArrayList<Album> newTest = new ArrayList<>();
         newTest.add(testAlbum);
         assertEquals(newTest, testAlbumDirectory.getAlbums());
+
+        assertEquals("Test Directory", testAlbumDirectory.getName());
 
     }
 
@@ -87,6 +91,8 @@ public class AlbumDirectoryTest {
         assertEquals(testRatedAlbum2, albums2.get(1));
         assertEquals(testAlbum, albums2.get(0));
 
+        assertEquals("Test Directory", testAlbumDirectory.getName());
+
 
     }
 
@@ -107,6 +113,8 @@ public class AlbumDirectoryTest {
         assertEquals(testAlbum, albums.get(1));
         assertEquals(testRatedAlbum2, albums.get(2));
         assertEquals(testRatedAlbum3, albums.get(3));
+
+        assertEquals("Test Directory", testAlbumDirectory.getName());
 
 
     }

@@ -34,5 +34,7 @@ class AlbumTest {
         assertEquals(9, testRatedAlbum.getRating());
         testAlbum.rateAlbum(7);
         assertEquals(7, testAlbum.getRating());
+        assertEquals("Iridescence", testRatedAlbum.getName());
+        assertEquals("DAMN", testAlbum.getName());
     }
 }

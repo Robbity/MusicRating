@@ -29,7 +29,7 @@ document what music they've been keeping up with recently.
 
 *A few examples to show how someone can use this application to produce a specific outcome.*
 
-PHASE 1
+**PHASE 1**
 
 - As a user, I want to be able to add an album to the list of albums I've listened to ✅
 - As a user, I want to be able to view the list of albums I've listened to ✅
@@ -39,8 +39,7 @@ PHASE 1
 - As a user, I want to be able to rate my albums on a scale of 10 ✅
 - As a user, I want to be able to sort my albums by rating and other details ✅
 
-PHASE 2
+**PHASE 2**
 
-- As a user, I want to be able to save my tracked albums list to file (if I so choose)
-- As a user, when I select the quit option from the application menu, I want to be reminded to save my tracked albums list to file and have the option to do so or not.
-- As a user, when I start the application, I want to be given the option to load my tracked albums list from file.
+- As a user, I want to be able to save my tracked albums list to file (if I so choose) ✅
+- As a user, when I start the application, I want to be given the option to load my tracked albums list from file ✅

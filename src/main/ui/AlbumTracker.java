@@ -2,13 +2,21 @@ package ui;
 
 import model.Album;
 import model.AlbumDirectory;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
+// CITATION: Lines 9 -> 85 based on TellerApp application design
 // Album Tracker application
 public class AlbumTracker {
+    private static final String JSON_STORE = "./data/albumtracker.json";
     private Scanner input;
     private AlbumDirectory albumDirectory;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
 
     // EFFECTS: runs album tracker application
@@ -44,14 +52,17 @@ public class AlbumTracker {
     private void init() {
         input = new Scanner(System.in);
         input.useDelimiter("\n");
-        albumDirectory = new AlbumDirectory();
+        albumDirectory = new AlbumDirectory("Robbie's Album List");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     // MODIFIES: this
     // EFFECTS: processes user command
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void processCommand(String command) {
         switch (command) {
-            case "l":
+            case "a":
                 addAlbum();
                 break;
             case "r":
@@ -66,6 +77,12 @@ public class AlbumTracker {
             case "8":
                 rateAlbum();
                 break;
+            case "s":
+                saveAlbumDirectory();
+                break;
+            case "l":
+                loadAlbumDirectory();
+                break;
             default:
                 System.out.println("Selection not valid...");
                 break;
@@ -75,11 +92,13 @@ public class AlbumTracker {
     // EFFECTS: displays menu of options to user
     private void displayMenu() {
         System.out.println("\nSelect from:");
-        System.out.println("\tl -> log new album");
+        System.out.println("\ta -> add new album");
         System.out.println("\tr -> remove logged album");
         System.out.println("\tv -> view log");
         System.out.println("\tb -> view rating sorted log");
         System.out.println("\t8 -> rate album");
+        System.out.println("\ts -> save album directory to file");
+        System.out.println("\tl -> load album directory from file");
         System.out.println("\tq -> quit application");
     }
 
@@ -206,6 +225,30 @@ public class AlbumTracker {
         }
     }
 
+    // EFFECTS: saves the album directory to file
+    private void saveAlbumDirectory() {
+        albumDirectory.recentSortAlbums();
+        try {
+            jsonWriter.open();
+            jsonWriter.write(albumDirectory);
+            jsonWriter.close();
+            System.out.println("Saved " + albumDirectory.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads album directory from file
+    private void loadAlbumDirectory() {
+        try {
+            albumDirectory = jsonReader.read();
+            System.out.println("Loaded " + albumDirectory.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
 
 
 
@@ -239,6 +282,5 @@ public class AlbumTracker {
         }
         return names.contains(albumName);
     }
-
 
 }

@@ -1,16 +1,26 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
 // Represents the album directory
-public class AlbumDirectory {
+public class AlbumDirectory implements Writable {
+    private final String name;
     private final ArrayList<Album> albumList;
     private int idCount;
 
     // EFFECTS: Lists of listened and unlistened albums
-    public AlbumDirectory() {
+    public AlbumDirectory(String name) {
+        this.name = name;
         albumList = new ArrayList<>();
         idCount = 0;
+    }
+
+    public String getName() {
+        return name;
     }
 
     // MODIFIES: this
@@ -67,6 +77,24 @@ public class AlbumDirectory {
                 }
             }
         }
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("albums", albumsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns things in this workroom as a JSON array
+    private JSONArray albumsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Album a : albumList) {
+            jsonArray.put(a.toJson());
+        }
+
+        return jsonArray;
     }
 
 

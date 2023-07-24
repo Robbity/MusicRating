@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // Represents an album with a name and a rating
-public class Album {
+public class Album implements Writable {
     private final String name;
     private int rating;
     private int id;
@@ -54,5 +57,13 @@ public class Album {
     //           album
     public void rateAlbum(int newRating) {
         rating = newRating;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("rating", rating);
+        json.put("id", id);
+        return json;
     }
 }
