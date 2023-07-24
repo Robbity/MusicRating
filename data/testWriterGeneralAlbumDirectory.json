@@ -1,0 +1,15 @@
+{
+    "albums": [
+        {
+            "name": "DAMN",
+            "rating": 7,
+            "id": 0
+        },
+        {
+            "name": "The White Album",
+            "rating": -1,
+            "id": 1
+        }
+    ],
+    "name": "My album directory"
+}
