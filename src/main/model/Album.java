@@ -59,6 +59,8 @@ public class Album implements Writable {
         rating = newRating;
     }
 
+    // CITATION: Taken from JsonSerializationDemo writable file
+    // EFFECTS:  Creates Json object with album data
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", name);

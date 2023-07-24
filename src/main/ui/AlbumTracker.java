@@ -59,33 +59,23 @@ public class AlbumTracker {
 
     // MODIFIES: this
     // EFFECTS: processes user command
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void processCommand(String command) {
-        switch (command) {
-            case "a":
-                addAlbum();
-                break;
-            case "r":
-                removeAlbum();
-                break;
-            case "v":
-                viewRecent();
-                break;
-            case "b":
-                viewHighest();
-                break;
-            case "8":
-                rateAlbum();
-                break;
-            case "s":
-                saveAlbumDirectory();
-                break;
-            case "l":
-                loadAlbumDirectory();
-                break;
-            default:
-                System.out.println("Selection not valid...");
-                break;
+        if (command.equals("a")) {
+            addAlbum();
+        } else if (command.equals("r")) {
+            removeAlbum();
+        } else if (command.equals("v")) {
+            viewRecent();
+        } else if (command.equals("b")) {
+            viewHighest();
+        } else if (command.equals("8")) {
+            rateAlbum();
+        } else if (command.equals("s")) {
+            saveAlbumDirectory();
+        } else if (command.equals("l")) {
+            loadAlbumDirectory();
+        } else {
+            System.out.println("Selection not valid...");
         }
     }
 
@@ -225,6 +215,7 @@ public class AlbumTracker {
         }
     }
 
+    // CITATION: Modified from JsonSerializationDemo JsonWriter file
     // EFFECTS: saves the album directory to file
     private void saveAlbumDirectory() {
         albumDirectory.recentSortAlbums();
@@ -238,6 +229,7 @@ public class AlbumTracker {
         }
     }
 
+    // CITATION: Modified from JsonSerializationDemo JsonWriter file
     // MODIFIES: this
     // EFFECTS: loads album directory from file
     private void loadAlbumDirectory() {
@@ -255,15 +247,6 @@ public class AlbumTracker {
 
     // VARIOUS HELPERS AND GETTERS
 
-//    private Boolean nextYesNo(String str) {
-//        if (Objects.equals(str, "y") || Objects.equals(str, "yes")) {
-//            return true;
-//        }
-//        if (Objects.equals(str, "n") || Objects.equals(str, "no")) {
-//            return false;
-//        }
-//    }
-//
     // EFFECTS: determines whether the number input is within the bounds
     private Boolean allowedRating(int num) {
         return (num >= 0 && num <= 10);

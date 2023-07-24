@@ -79,6 +79,8 @@ public class AlbumDirectory implements Writable {
         }
     }
 
+    // CITATION: Taken from JsonSerializationDemo writable file
+    // EFFECTS:  Creates Json object with album data
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", name);
@@ -86,6 +88,7 @@ public class AlbumDirectory implements Writable {
         return json;
     }
 
+    // CITATION: Taken from JsonSerializationDemo writable file
     // EFFECTS: returns things in this workroom as a JSON array
     private JSONArray albumsToJson() {
         JSONArray jsonArray = new JSONArray();

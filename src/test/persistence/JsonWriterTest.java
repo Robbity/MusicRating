@@ -24,7 +24,7 @@ class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterEmptyWorkroom() {
+    void testWriterEmptyAlbumDirectory() {
         try {
             AlbumDirectory ad = new AlbumDirectory( "My album directory");
             JsonWriter writer = new JsonWriter("./data/testWriterEmptyAlbumDirectory.json");
@@ -42,7 +42,7 @@ class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterGeneralWorkroom() {
+    void testWriterGeneralAlbumDirectory() {
         try {
             AlbumDirectory ad = new AlbumDirectory("My album directory");
             ad.addNewAlbum(new Album("DAMN", 7, 0));
