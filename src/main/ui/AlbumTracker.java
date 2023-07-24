@@ -59,23 +59,33 @@ public class AlbumTracker {
 
     // MODIFIES: this
     // EFFECTS: processes user command
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void processCommand(String command) {
-        if (command.equals("a")) {
-            addAlbum();
-        } else if (command.equals("r")) {
-            removeAlbum();
-        } else if (command.equals("v")) {
-            viewRecent();
-        } else if (command.equals("b")) {
-            viewHighest();
-        } else if (command.equals("8")) {
-            rateAlbum();
-        } else if (command.equals("s")) {
-            saveAlbumDirectory();
-        } else if (command.equals("l")) {
-            loadAlbumDirectory();
-        } else {
-            System.out.println("Selection not valid...");
+        switch (command) {
+            case "a":
+                addAlbum();
+                break;
+            case "r":
+                removeAlbum();
+                break;
+            case "v":
+                viewRecent();
+                break;
+            case "b":
+                viewHighest();
+                break;
+            case "8":
+                rateAlbum();
+                break;
+            case "s":
+                saveAlbumDirectory();
+                break;
+            case "l":
+                loadAlbumDirectory();
+                break;
+            default:
+                System.out.println("Selection not valid...");
+                break;
         }
     }
 
