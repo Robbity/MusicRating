@@ -39,9 +39,15 @@ public class AlbumDirectory implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: Adds the album to the rated list
+    // EFFECTS: Removes the album from the album list
     public void removeNewAlbum(Album album) {
         albumList.remove(album);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Removes the album from the album list
+    public void removeIndex(int i) {
+        albumList.remove(i);
     }
 
     // EFFECTS: returns the list of albums thus far
@@ -96,7 +102,6 @@ public class AlbumDirectory implements Writable {
         for (Album a : albumList) {
             jsonArray.put(a.toJson());
         }
-
         return jsonArray;
     }
 

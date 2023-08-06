@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AlbumTrackerUI extends JFrame implements ActionListener {
@@ -137,10 +138,13 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     }
 
     private void deleteAlbum() {
-        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
         int[] rows = table.getSelectedRows();
+        ArrayList<Album> albums = albumDirectory.getAlbums();
         for (int i = 0; i < rows.length; i++) {
+            albumDirectory.removeIndex(rows[i] - i);
             model.removeRow(rows[i] - i);
+
         }
     }
 
@@ -181,16 +185,16 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
         model.addRow(data);
     }
 
-    private void removeFromTable(Album a) {
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        for (int i = model.getRowCount() - 1; i >= 0; i--) {
-            if (model.getValueAt(i, 0).equals(a.getName())) {
-                albumDirectory.removeNewAlbum(a);
-                model.removeRow(i);
-//                i -= 1;
-            }
-        }
-    }
+//    private void removeFromTable(Album a) {
+//        DefaultTableModel model = (DefaultTableModel) table.getModel();
+//        for (int i = model.getRowCount() - 1; i >= 0; i--) {
+//            if (model.getValueAt(i, 0).equals(a.getName())) {
+//                albumDirectory.removeNewAlbum(a);
+//                model.removeRow(i);
+////                i -= 1;
+//            }
+//        }
+//    }
 
     // EFFECTS: finds the action performed on the GUI
     @Override
@@ -218,7 +222,7 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: loads album directory from file
     private void loadDirectory() {
-        // need to clear table
+        clearTable();
         try {
             albumDirectory = jsonReader.read();
             for (Album a : albumDirectory.getAlbums()) {
@@ -247,6 +251,13 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     }
 
     // Helpers
+
+    // MODIFIES: this
+    // EFFECTS: removes all assessments in the grading scheme
+    private void clearTable() {
+        DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+        dtm.setRowCount(0);
+    }
 
     private Boolean allowedRating(int num) {
         return (num >= 0 && num <= 10);
