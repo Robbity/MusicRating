@@ -226,6 +226,7 @@ public class AlbumTracker {
     }
 
     // CITATION: Modified from JsonSerializationDemo JsonWriter file
+    // MODIFIES: jsonWriter
     // EFFECTS: saves the album directory to file
     private void saveAlbumDirectory() {
         albumDirectory.recentSortAlbums();
