@@ -5,23 +5,17 @@ import model.AlbumDirectory;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 public class AlbumTrackerUI extends JFrame implements ActionListener {
     private AlbumDirectory albumDirectory;
     private JButton addAlbum;
     private JButton removeAlbum;
-//    private JButton clearAlbums;
     private JButton loadDirectory;
     private JButton saveDirectory;
     private JTextField albumName;
@@ -29,12 +23,11 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     private JCheckBox albumListened;
     private JTable table;
     private static final String JSON_STORE = "./data/albumtrackerUI.json";
-    private static final String IMG_STORE = "./data/img.png";
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
-    private BufferedImage myPicture;
+//    private static final String IMG_STORE = "./data/img.png";
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
 
-    // EFFECTS: runs GUI for album tracker program
+    // EFFECTS: runs UI for album tracker program
     public AlbumTrackerUI() {
         super("Album Tracker");
         albumDirectory = new AlbumDirectory("Album Directory");
@@ -53,9 +46,29 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
 
 
         // calls to methods
+        showSplash();
         loadTable();
         loadInput();
         setVisible(true);
+    }
+
+    // EFFECTS: provides splash screen, with duration of 3000ms
+    private void showSplash() {
+        JPanel content = (JPanel)getContentPane();
+        JLabel label = new JLabel(new ImageIcon("./data/splashscreen.png"));
+        content.add(label, BorderLayout.CENTER);
+        setVisible(true);
+
+        // Wait time on splash screen
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            //pass
+        }
+
+        content.remove(label);
+        setVisible(false);
+
     }
 
     // MODIFIES: this
@@ -82,7 +95,7 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS:
+    // EFFECTS: loads an empty table of albums with a name, listened status, and rating
     private void loadTable() {
         String[] columns = {"Name", "Listened", "Rating"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
@@ -99,48 +112,39 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a single assessment into a grading scheme
-//    private void setupAlbum() {
-//        if (if (allowedRating(Integer.parseInt(albumRating.getText())) && !invalidString(albumRating.getText())
-//                && !invalidString(albumName.getText()) && albumRating.getText().matches("^[0-9]*$")) {
-//            if (albumListened.isSelected()) {
-//                Album a = new Album(albumName.getText(), Integer.parseInt(albumRating.getText()));
-//                albumDirectory.addNewAlbum(albumName.getText(), Integer.parseInt(albumRating.getText()));
-//                addToTable(a);
-//            } else {
-//                Album a = new Album(albumName.getText(), -1);
-//                albumDirectory.addNewAlbum(albumName.getText(), -1);
-//                addToTable(a);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Invalid input!");
-//        }
-//    }
-
+    // EFFECTS: determines based on the input whether an album can be added, if it can be
+    //          then the album is added to both the table and the album directory
     private void setupAlbum() {
+        // Album has not been listened to
         if (!albumListened.isSelected()) {
-            if (!invalidString(albumRating.getText())) {
+            if (!invalidString(albumName.getText())) {
                 Album a = new Album(albumName.getText(), -1);
                 albumDirectory.addNewAlbum(a);
                 addToTable(a);
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid album name input!");
             }
+            // Album has been listened to
         } else {
             if (ratingCheck(albumRating)) {
-                Album a = new Album(albumName.getText(), Integer.parseInt(albumRating.getText()));
-                albumDirectory.addNewAlbum(a);
-                addToTable(a);
+                if (!invalidString(albumName.getText())) {
+                    Album a = new Album(albumName.getText(), Integer.parseInt(albumRating.getText()));
+                    albumDirectory.addNewAlbum(a);
+                    addToTable(a);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid album name input!");
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Invalid input!");
+                JOptionPane.showMessageDialog(this, "Invalid rating input!");
             }
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes the album from both the album directory and the table
     private void deleteAlbum() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         int[] rows = table.getSelectedRows();
-        ArrayList<Album> albums = albumDirectory.getAlbums();
         for (int i = 0; i < rows.length; i++) {
             albumDirectory.removeIndex(rows[i] - i);
             model.removeRow(rows[i] - i);
@@ -149,7 +153,8 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS:
+    // EFFECTS: creates new buttons for each of the JButton fields, adding an action listener
+    //          and adding each button to this
     private void addButtons() {
         addAlbum = new JButton("Add Album");
         addAlbum.addActionListener(this);
@@ -158,10 +163,6 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
         removeAlbum = new JButton("Remove Album");
         removeAlbum.addActionListener(this);
         this.add(removeAlbum);
-
-//        clearAlbums = new JButton("Clear");
-//        clearAlbums.addActionListener(this);
-//        this.add(clearAlbums);
 
         saveDirectory = new JButton("Save");
         saveDirectory.addActionListener(this);
@@ -173,7 +174,8 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds the assessment to the table
+    // EFFECTS: determines the how to display the album data on the table, depending on rating value
+    //          then adds the album to the table
     private void addToTable(Album a) {
         Object[] data;
         if (a.getRating() == -1) {
@@ -184,17 +186,6 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.addRow(data);
     }
-
-//    private void removeFromTable(Album a) {
-//        DefaultTableModel model = (DefaultTableModel) table.getModel();
-//        for (int i = model.getRowCount() - 1; i >= 0; i--) {
-//            if (model.getValueAt(i, 0).equals(a.getName())) {
-//                albumDirectory.removeNewAlbum(a);
-//                model.removeRow(i);
-////                i -= 1;
-//            }
-//        }
-//    }
 
     // EFFECTS: finds the action performed on the GUI
     @Override
@@ -212,15 +203,11 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
         if (e.getSource() == removeAlbum) {
             deleteAlbum();
         }
-
-//        if (e.getSource() == clearButton) {
-//            clearAllAssessments();
-//        }
     }
 
     // CITATION: Modified from JsonSerializationDemo JsonWriter file
     // MODIFIES: this
-    // EFFECTS: loads album directory from file
+    // EFFECTS: loads album directory from JSON file
     private void loadDirectory() {
         clearTable();
         try {
@@ -237,9 +224,8 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
 
     // CITATION: Modified from JsonSerializationDemo JsonWriter file
     // MODIFIES: jsonWriter
-    // EFFECTS: saves the album directory to file
+    // EFFECTS: saves the album directory to JSON file
     private void saveDirectory() {
-//        albumDirectory.recentSortAlbums();
         try {
             jsonWriter.open();
             jsonWriter.write(albumDirectory);
@@ -259,6 +245,7 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
         dtm.setRowCount(0);
     }
 
+    // EFFECTS: check that integer is within specific bounds
     private Boolean allowedRating(int num) {
         return (num >= 0 && num <= 10);
     }
@@ -274,19 +261,24 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
             return false;
         }
         try {
-            double d = Double.parseDouble(strNum);
+            Double.parseDouble(strNum);
         } catch (NumberFormatException e) {
             return false;
         }
         return true;
     }
 
+    // EFFECTS: performs multiple rating checks on fields to see that rating is valid
     private Boolean ratingCheck(JTextField albumRating) {
         if (!isNumeric(albumRating.getText())) {
             return false;
         } else {
-            return allowedRating(Integer.parseInt(albumRating.getText())) && !invalidString(albumRating.getText())
-                   && albumRating.getText().matches("^[0-9]*$");
+            try {
+                return allowedRating(Integer.parseInt(albumRating.getText())) && !invalidString(albumRating.getText())
+                        && albumRating.getText().matches("^[0-9]*$");
+            } catch (NumberFormatException e) {
+                return false;
+            }
         }
     }
 

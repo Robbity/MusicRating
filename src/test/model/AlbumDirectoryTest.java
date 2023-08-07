@@ -58,6 +58,11 @@ public class AlbumDirectoryTest {
         assertEquals(2, testAlbumDirectory.getAlbums().size());
         testAlbumDirectory.removeNewAlbum(testRatedAlbum);
         assertEquals(1, testAlbumDirectory.getAlbums().size());
+        testAlbumDirectory.addNewAlbum(testRatedAlbum);
+        assertEquals(2, testAlbumDirectory.getAlbums().size());
+        testAlbumDirectory.removeIndex(1);
+        assertEquals(testAlbum, testAlbumDirectory.getAlbums().get(0));
+        assertEquals(1, testAlbumDirectory.getAlbums().size());
 
         ArrayList<Album> newTest = new ArrayList<>();
         newTest.add(testAlbum);

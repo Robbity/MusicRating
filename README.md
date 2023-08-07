@@ -48,8 +48,13 @@ document what music they've been keeping up with recently.
 
 # Instructions for Grader
 
-- You can generate the first required action related to adding Xs to a Y by...
-- You can generate the second required action related to adding Xs to a Y by...
-- You can locate my visual component by...
-- You can save the state of my application by...
-- You can reload the state of my application by...
+- You can generate the first required action related to adding Xs to a Y by submitting album data and clicking 'add album'
+- **Instructions for adding an album:** Album must have a name. If listened is not ticked, then the rating doesn't matter. If listened is ticked, then give a rating from 0-10.
+
+- You can generate the second required action related to adding Xs to a Y by selecting the albums you would like to remove on the table, and then clicking 'remove album'. (You can select multiple).
+
+- You can locate my visual component by starting up the application, as I have a splash screen.
+
+- You can save the state of my application by clicking the save button located at the bottom.
+
+- You can reload the state of my application by clicking the load button located at the bottom.
