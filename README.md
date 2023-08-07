@@ -4,7 +4,7 @@
 
 ### What does this application do?
 
-<p>This application is able to allow users to *track and rate* their favourite albums and EPs.
+<p>This application is able to allow users to track and rate their favourite albums and EPs.
 Additionally, it allows the user to create a list of albums to be listened to in the future.</p>
 The database of albums will be able to be sorted by multiple different features, such as the rating given.
 
@@ -43,8 +43,6 @@ document what music they've been keeping up with recently.
 
 - As a user, I want to be able to save my tracked albums list to file (if I so choose) ✅
 - As a user, when I start the application, I want to be given the option to load my tracked albums list from file ✅
-
-# Instructions for Grader
 
 # Instructions for Grader
 

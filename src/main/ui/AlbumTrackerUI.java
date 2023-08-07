@@ -12,6 +12,7 @@ import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+// Album Tracker Application with a User Interface
 public class AlbumTrackerUI extends JFrame implements ActionListener {
     private AlbumDirectory albumDirectory;
     private JButton addAlbum;
@@ -23,7 +24,6 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     private JCheckBox albumListened;
     private JTable table;
     private static final String JSON_STORE = "./data/albumtrackerUI.json";
-//    private static final String IMG_STORE = "./data/img.png";
     private final JsonWriter jsonWriter;
     private final JsonReader jsonReader;
 
@@ -99,14 +99,14 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     private void loadTable() {
         String[] columns = {"Name", "Listened", "Rating"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+
         table = new JTable(tableModel);
         table.setPreferredScrollableViewportSize(new Dimension(750, 400));
         table.setFillsViewportHeight(true);
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.setBounds(50, 0, 450, 500);
-        this.add(scrollPane);
-
+        JScrollPane scroll = new JScrollPane(table);
+        this.add(scroll);
+        table.setBounds(0, 0, 400, 400);
         table.setDefaultEditor(Object.class, null);
 
     }
@@ -143,12 +143,13 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: removes the album from both the album directory and the table
     private void deleteAlbum() {
+
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         int[] rows = table.getSelectedRows();
+
         for (int i = 0; i < rows.length; i++) {
             albumDirectory.removeIndex(rows[i] - i);
             model.removeRow(rows[i] - i);
-
         }
     }
 
@@ -177,14 +178,15 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
     // EFFECTS: determines the how to display the album data on the table, depending on rating value
     //          then adds the album to the table
     private void addToTable(Album a) {
-        Object[] data;
+        Object[] albumdata;
         if (a.getRating() == -1) {
-            data = new Object[]{a.getName(), "No", "N/A"};
+            albumdata = new Object[]{a.getName(), "No", "N/A"};
         } else {
-            data = new Object[]{a.getName(), "Yes", a.getRating()};
+            albumdata = new Object[]{a.getName(), "Yes", a.getRating()};
         }
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.addRow(data);
+
+        model.addRow(albumdata);
     }
 
     // EFFECTS: finds the action performed on the GUI
