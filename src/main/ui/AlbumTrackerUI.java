@@ -2,6 +2,8 @@ package ui;
 
 import model.Album;
 import model.AlbumDirectory;
+import model.Event;
+import model.EventLog;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -50,6 +52,8 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
         loadTable();
         loadInput();
         setVisible(true);
+
+        eventListener();
     }
 
     // EFFECTS: provides splash screen, with duration of 3000ms
@@ -281,6 +285,26 @@ public class AlbumTrackerUI extends JFrame implements ActionListener {
             } catch (NumberFormatException e) {
                 return false;
             }
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds a window listener for if the window is closed, then exits with code 0
+    private void eventListener() {
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                printLog(EventLog.getInstance());
+                System.exit(0);
+            }
+        });
+    }
+
+    // EFFECTS: prints log of events occurred during program instance
+    private void printLog(EventLog log) {
+        System.out.println("All Events Logged: ");
+        for (Event e : log) {
+            System.out.println(e);
         }
     }
 

@@ -8,5 +8,6 @@ public class Main {
 //        new AlbumTracker();
         // UI
         new AlbumTrackerUI();
+
     }
 }

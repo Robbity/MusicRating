@@ -29,6 +29,8 @@ public class AlbumDirectory implements Writable {
     public void addNewAlbum(String name, int rating) {
         Album addedAlbum = new Album(name, rating, idCount++);
         albumList.add(addedAlbum);
+        EventLog.getInstance().logEvent(new Event("Album: "
+                + name + " added to album list with rating: " + rating + "."));
     }
 
     // MODIFIES: this
@@ -36,17 +38,23 @@ public class AlbumDirectory implements Writable {
     public void addNewAlbum(Album album) {
         album.setId(idCount++);
         albumList.add(album);
+        EventLog.getInstance().logEvent(new Event("Album: "
+                + album.getName() + " added to album list with rating: " + album.getRating() + "."));
     }
 
     // MODIFIES: this
     // EFFECTS: Removes the album from the album list
     public void removeNewAlbum(Album album) {
         albumList.remove(album);
+        EventLog.getInstance().logEvent(new Event("Album: "
+                + album.getName() + " removed from album list."));
     }
 
     // MODIFIES: this
     // EFFECTS: Removes the album from the album list
     public void removeIndex(int i) {
+        EventLog.getInstance().logEvent(new Event("Album: "
+                + albumList.get(i).getName() + " removed from album list."));
         albumList.remove(i);
     }
 
@@ -104,6 +112,5 @@ public class AlbumDirectory implements Writable {
         }
         return jsonArray;
     }
-
 
 }

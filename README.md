@@ -56,3 +56,59 @@ document what music they've been keeping up with recently.
 - You can save the state of my application by clicking the save button located at the bottom.
 
 - You can reload the state of my application by clicking the load button located at the bottom.
+
+**PHASE 4**
+
+Task 2 - Event Log
+
+```
+All Events Logged: 
+Tue Aug 08 20:09:48 PDT 2023
+Album: DAMN added to album list with rating: 7.
+Tue Aug 08 20:09:48 PDT 2023
+Album: The White Album added to album list with rating: -1.
+Tue Aug 08 20:09:48 PDT 2023
+Album: Nurture added to album list with rating: 10.
+Tue Aug 08 20:09:48 PDT 2023
+Album: shaft* added to album list with rating: -1.
+Tue Aug 08 20:09:54 PDT 2023
+Album: Test1 added to album list with rating: 5.
+Tue Aug 08 20:10:00 PDT 2023
+Album: Test2 added to album list with rating: -1.
+Tue Aug 08 20:10:11 PDT 2023
+Album: Test3 added to album list with rating: 10.
+Tue Aug 08 20:10:13 PDT 2023
+Album: Test2 removed from album list.
+Tue Aug 08 20:10:25 PDT 2023
+Album: Test4 added to album list with rating: 3.
+Tue Aug 08 20:10:29 PDT 2023
+Album: Test1 removed from album list.
+Tue Aug 08 20:10:29 PDT 2023
+Album: Test3 removed from album list.
+Tue Aug 08 20:10:29 PDT 2023
+Album: Test4 removed from album list.
+
+Process finished with exit code 0
+```
+
+Task 3 - UML Diagram
+
+![UML Diagram](umldiagram.png "UML Diagram")
+
+Task 3 Part - Reflection
+
+I would refactor the following given more time:
+
+**Album**
+- I had to override the album constructor to provide two different functionalities, one with an id and one without. This was implemented to ensure order is maintained due to the sorting based on rating/recency. I would instead implement this within the AlbumDirectory class with a simpler sorting method.
+- This overriding of the constructor also led to the id being -1 when added without an id, which caused confusing in the code. Ideally I'd add an iterator that allocates a new larger value if an id is not given.
+
+**AlbumDirectory**
+- As my album directory got increasingly complicated, I feel I strayed from the Single Responsibility Principle. I could possibly integrate a DirectoryManager which would sort out the albums.
+- Additionally, I had two album add methods, and two remove album methods. For clarity, I would use only a single removal method, as I needed two when my UI was made.
+- Furthermore, I could use a single addNewAlbum method, creating the album initially, and then adding it. The fact that I required multiple add album methods indicated that my code was poorly organized.
+
+**AlbumTrackerUI**
+- For my UI, while I felt my method choices made sense, I also feel that I could make some of my conditions far less complicated. I had many nested if else statements to factor in for incorrect inputs. I could refactor those out into separate methods.
+- Additionally, I could separate some of the methods for loading different JSwing components, which would increase my cohesion and also make the code clearer for anyone trying to refactor later. For instance, splitting Table and Input into separate categories based on their functions.
+- Finally, my splash screen should NOT use Thread.sleep to briefly show the image, there are likely better and less risky methods to show a temporary image. For instance using the in-built Java splashscreen package (although it is quite complicated!)
