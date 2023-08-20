@@ -1,6 +1,6 @@
 # Music Rating Application
 
-## CPSC 210 Project - Robbie Laughlen
+## Robbie Laughlen
 
 ### What does this application do?
 
@@ -33,9 +33,7 @@ document what music they've been keeping up with recently.
 
 - As a user, I want to be able to add an album to the list of albums I've listened to ✅
 - As a user, I want to be able to view the list of albums I've listened to ✅
-- As a user, I want to be able to mark whether I've listened to an album or not
 - As a user, I want to be able to remove an album from my list ✅
-- As a user, I want to be able to see the total number of albums I've listened to
 - As a user, I want to be able to rate my albums on a scale of 10 ✅
 - As a user, I want to be able to sort my albums by rating and other details ✅
 
